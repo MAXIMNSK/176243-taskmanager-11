@@ -7,6 +7,7 @@ const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 
 /**
  * Функция возвращает секцию вёрстки в виде строки
+ * @return {string} возвращает блок разметки
  */
 const createMenu = () => {
   return (
@@ -23,6 +24,7 @@ const createMenu = () => {
 
 /**
  * Функция возвращает секцию вёрстки в виде строки
+ * @return {string} возвращает блок разметки
  */
 const createFilter = () => {
   return (
@@ -45,6 +47,7 @@ const createFilter = () => {
 
 /**
  * Функция возвращает секцию вёрстки в виде строки
+ * @return {string} возвращает блок разметки
  */
 const createBoard = () => {
   return (
@@ -61,6 +64,7 @@ const createBoard = () => {
 
 /**
  * Функция возвращает секцию вёрстки в виде строки
+ * @return {string} возвращает блок разметки
  */
 const createTask = () => {
   return (
@@ -100,6 +104,7 @@ const createTask = () => {
 
 /**
  * Функция возвращает форму создания/редактирования задачи в виде строки
+ * @return {string} возвращает блок разметки
  */
 const createTaskEditor = () => {
   return (
@@ -174,11 +179,13 @@ const createTaskEditor = () => {
 
 /**
  * Функция возвращает секцию вёрстки в виде строки
+ * @return {string} возвращает блок разметки
  */
 const createLoadMoreButton = () => `<button class="load-more" type="button">load more</button>`;
 
 /**
  * Заполяем список задач, плитками оных
+ * @param {*} taskBoard элемент в который мы рендерим возвращаемое функцией значение
  * @param {*} count передаём количество экспортируемых элементов
  */
 const fillTaskList = (taskBoard, count) => {
@@ -191,9 +198,10 @@ const fillTaskList = (taskBoard, count) => {
  * Функция рендерит в разметку входные данные в виде строки
  * @param {*} container целевой блок в который будет рендерится шаблон
  * @param {*} template шаблон который функция рендерит
- * @param {*} place передаём позицию добавляемого элемента
+ * @param {*} place передаём позицию добавляемого элемента. Значение по умолчанию beforeend
+ * @return {*} возвращает результат выполнения функции
  */
-const render = (container, template, place = 'beforeend') => container.insertAdjacentHTML(place, template);
+const render = (container, template, place = `beforeend`) => container.insertAdjacentHTML(place, template);
 
 /**
  * Функция инициализирует блоки в разметку
@@ -209,6 +217,6 @@ const init = () => {
   render(taskListElement, createTaskEditor());
   fillTaskList(taskListElement, TASK_COUNT);
   render(boardElement, createLoadMoreButton());
-}
+};
 
 init();

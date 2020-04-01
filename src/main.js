@@ -1,12 +1,14 @@
 'use strict';
 
 const TASK_COUNT = 3;
-// ключевые элементы в разметке, внутрь которых будем добавлять разметку
+
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 
-// линейная функция возвращающая секцию разметки
-const createSiteMenuTemplate = () => {
+/**
+ * Функция возвращает секцию вёрстки в виде строки
+ */
+const createMenu = () => {
   return (
     `<section class="control__btn-wrap">
       <input type="radio" name="control" id="control__new-task" class="control__input visually-hidden"/>
@@ -19,8 +21,10 @@ const createSiteMenuTemplate = () => {
   );
 };
 
-// линейная функция возвращающая секцию разметки
-const createFilterTemplate = () => {
+/**
+ * Функция возвращает секцию вёрстки в виде строки
+ */
+const createFilter = () => {
   return (
     `<section class="main__filter filter container">
       <input type="radio" id="filter__all" class="filter__input visually-hidden" name="filter" checked/>
@@ -39,8 +43,10 @@ const createFilterTemplate = () => {
   );
 };
 
-// линейная функция возвращающая секцию разметки
-const createBoardTemplate = () => {
+/**
+ * Функция возвращает секцию вёрстки в виде строки
+ */
+const createBoard = () => {
   return (
     `<section class="board container">
       <div class="board__filter-list">
@@ -53,8 +59,10 @@ const createBoardTemplate = () => {
   );
 };
 
-// линейная функция возвращающая независимую часть разметки
-const createTaskTemplate = () => {
+/**
+ * Функция возвращает секцию вёрстки в виде строки
+ */
+const createTask = () => {
   return (
     `<article class="card card--black">
       <div class="card__form">
@@ -90,8 +98,10 @@ const createTaskTemplate = () => {
   );
 };
 
-// линейная функция возвращающая независимую часть разметки article - "Форма создания/редактирования задачи"
-const createTaskEditTemplate = () => {
+/**
+ * Функция возвращает форму создания/редактирования задачи в виде строки
+ */
+const createTaskEditor = () => {
   return (
     `<article class="card card--edit card--yellow card--repeat">
       <form class="card__form" method="get">
@@ -162,35 +172,43 @@ const createTaskEditTemplate = () => {
   );
 };
 
-const createLoadMoreButtonTemplate = () => {
-  return (
-    `<button class="load-more" type="button">load more</button>`
-  );
+/**
+ * Функция возвращает секцию вёрстки в виде строки
+ */
+const createLoadMoreButton = () => `<button class="load-more" type="button">load more</button>`;
+
+/**
+ * Заполяем список задач, плитками оных
+ * @param {*} count передаём количество экспортируемых элементов
+ */
+const fillTaskList = (taskBoard, count) => {
+  for (let i = 0; i < count; i++) {
+    render(taskBoard, createTask());
+  }
 };
 
-// функция для рендеринга разметки
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
+/**
+ * Функция рендерит в разметку входные данные в виде строки
+ * @param {*} container целевой блок в который будет рендерится шаблон
+ * @param {*} template шаблон который функция рендерит
+ * @param {*} place передаём позицию добавляемого элемента
+ */
+const render = (container, template, place = 'beforeend') => container.insertAdjacentHTML(place, template);
 
-// рендерим в блоке .main__control секцию .control__btn-wrap, перед закрывающей скобкой
-render(siteHeaderElement, createSiteMenuTemplate(), `beforeend`);
-// рендерим в блоке .main секцию .main__filter, перед закрывающей скобкой
-render(siteMainElement, createFilterTemplate(), `beforeend`);
-// рендерим в блоке .main секцию .board container, перед закрывающей скобкой
-render(siteMainElement, createBoardTemplate(), `beforeend`);
+/**
+ * Функция инициализирует блоки в разметку
+ */
+const init = () => {
+  render(siteHeaderElement, createMenu());
+  render(siteMainElement, createFilter());
+  render(siteMainElement, createBoard());
 
-// находим ранее сгенерированные элементы в разметку
-const boardElement = siteMainElement.querySelector(`.board`);
-const taskListElement = siteMainElement.querySelector(`.board__tasks`);
+  const boardElement = siteMainElement.querySelector(`.board`);
+  const taskListElement = siteMainElement.querySelector(`.board__tasks`);
 
-// рендерим форму создания/редактирования задачи
-render(taskListElement, createTaskEditTemplate(), `beforeend`);
-
-// рендерим карточки шаблонов по умолчанию
-for (let i = 0; i < TASK_COUNT; i++) {
-  render(taskListElement, createTaskTemplate(), `beforeend`);
+  render(taskListElement, createTaskEditor());
+  fillTaskList(taskListElement, TASK_COUNT);
+  render(boardElement, createLoadMoreButton());
 }
 
-// рендерим после доски задач, кнопку
-render(boardElement, createLoadMoreButtonTemplate(), `beforeend`);
+init();

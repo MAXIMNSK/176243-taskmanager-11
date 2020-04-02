@@ -5,6 +5,13 @@ const TASK_COUNT = 3;
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 
+const listProperties = {
+  beforebegin: 'beforebegin',
+  afterbegin: 'afterbegin',
+  beforeend: 'beforeend',
+  afterend: 'afterend',
+};
+
 /**
  * Функция возвращает секцию вёрстки в виде строки
  * @return {string} возвращает блок разметки
@@ -201,7 +208,7 @@ const fillTaskList = (taskBoard, count) => {
  * @param {*} place передаём позицию добавляемого элемента. Значение по умолчанию beforeend
  * @return {*} возвращает результат выполнения функции
  */
-const render = (container, template, place = `beforeend`) => container.insertAdjacentHTML(place, template);
+const render = (container, template, place = listProperties.beforeend) => container.insertAdjacentHTML(place, template);
 
 /**
  * Функция инициализирует блоки в разметку

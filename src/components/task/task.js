@@ -1,16 +1,14 @@
-import {getTime} from "../utility";
-import {MONTHS} from "../constants";
+import {getClassRepeat, getClassDeadline, showDate, showTime} from "../utility";
+import {MONTHS} from "../consts/constants";
 
-export const createTask = (task) => {
+const createTask = (task) => {
   const {color, description, dueDate, isArchive, isFavorite, repeatingDays} = task;
 
-  const classRepeat = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
-  const dateExpired = dueDate instanceof Date && dueDate < Date.now();
-  const classDeadline = dateExpired ? `card--deadline` : ``;
-
-  const showDateStatus = !!dueDate;
-  const formedDate = showDateStatus ? `${dueDate.getDate()} ${MONTHS[dueDate.getMonth()]}` : ``;
-  const formedTime = showDateStatus ? getTime(dueDate) : ``;
+  const dateShow = !!dueDate;
+  const classRepeat = getClassRepeat(repeatingDays);
+  const classDeadline = getClassDeadline(dueDate);
+  const date = showDate(dateShow, dueDate, MONTHS);
+  const time = showTime(dateShow, dueDate);
 
   const btnArchiveStatus = isArchive ? `` : `card__btn--disabled`;
   const btnFavoriteStatus = isFavorite ? `` : `card__btn--disabled`;
@@ -37,8 +35,8 @@ export const createTask = (task) => {
               <div class="card__dates">
                 <div class="card__date-deadline">
                   <p class="card__input-deadline-wrap">
-                    <span class="card__date">${formedDate}</span>
-                    <span class="card__time">${formedTime}</span>
+                    <span class="card__date">${date}</span>
+                    <span class="card__time">${time}</span>
                   </p>
                 </div>
               </div>
@@ -49,3 +47,5 @@ export const createTask = (task) => {
     </article>`
   );
 };
+
+export {createTask};

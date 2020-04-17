@@ -9,10 +9,8 @@ const getTemplate = (filter, isChecked) => {
   `);
 };
 
-const fillTemplate = () => {
-  return getFilters().map((element, index) => getTemplate(element, index === 0)).join(`\n`);
-};
+const fillTemplate = () => getFilters().map((element, index) => getTemplate(element, index === 0)).join(`\n`);
 
-export const getElements = () => {
-  return fillTemplate();
-};
+const getMarkup = () => fillTemplate();
+
+export {getMarkup};

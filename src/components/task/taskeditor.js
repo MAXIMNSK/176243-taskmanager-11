@@ -1,41 +1,31 @@
-import {getTime} from "../utility";
-import {ACCENT_COLORS, WEEK_DAYS, MONTHS} from "../constants";
+import {getClassRepeat, getClassDeadline, showDate, showTime} from "../utility";
+import {ACCENT_COLORS, WEEK_DAYS, MONTHS} from "../consts/constants";
 
-const getDayBtnsMarkup = (weekDays, repeatedDays) => {
-  return weekDays.map((day, index) => {
-    const checkStatus = repeatedDays[day];
-
-    return (`
-      <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-${day}-${index}" name="repeat" value="${day}" ${checkStatus ? `checked` : ``}/>
-      <label class="card__repeat-day" for="repeat-${day}-${index}">${day}</label>
-    `);
-  }).join(``);
+const getMarkupDays = (day, index, repeatedDays) => {
+  return (`
+    <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-${day}-${index}" name="repeat" value="${day}" ${repeatedDays[day] ? `checked` : ``}/>
+    <label class="card__repeat-day" for="repeat-${day}-${index}">${day}</label>
+  `);
 };
 
-const getColorBtnsMarkup = (colors, currentColor) => {
-  return colors.map((color, index) => {
-    return (`
-      <input type="radio" id="color-${color}-${index}" class="card__color-input card__color-input--${color} visually-hidden" name="color" value="${color}" ${currentColor === color ? `checked` : ``}/>
-      <label for="color-${color}-${index}" class="card__color card__color--${color}">${color}</label>
-    `);
-  }).join(``);
+const getMarkupColors = (color, index, currentColor) => {
+  return (`
+    <input type="radio" id="color-${color}-${index}" class="card__color-input card__color-input--${color} visually-hidden" name="color" value="${color}" ${currentColor === color ? `checked` : ``}/>
+    <label for="color-${color}-${index}" class="card__color card__color--${color}">${color}</label>
+  `);
 };
 
-export const createTaskEditor = (task) => {
+const createTaskEditor = (task) => {
   const {color, description, dueDate, repeatingDays} = task;
 
-  const isRepeatingTask = Object.values(repeatingDays).some(Boolean);
-  const classRepeat = isRepeatingTask ? `card--repeat` : ``;
+  const dateShow = !!dueDate;
+  const classRepeat = getClassRepeat(repeatingDays);
+  const classDeadline = getClassDeadline(dueDate);
+  const date = showDate(dateShow, dueDate, MONTHS);
+  const time = showTime(dateShow, dueDate);
 
-  const dateExpired = dueDate instanceof Date && dueDate < Date.now();
-  const classDeadline = dateExpired ? `card--deadline` : ``;
-
-  const showDateStatus = !!dueDate;
-  const formedDate = showDateStatus ? `${dueDate.getDate()} ${MONTHS[dueDate.getMonth()]}` : ``;
-  const formedTime = showDateStatus ? getTime(dueDate) : ``;
-
-  const renderButtonsDays = getDayBtnsMarkup(WEEK_DAYS, repeatingDays);
-  const renderButtonsColor = getColorBtnsMarkup(ACCENT_COLORS, color);
+  const renderButtonsDays = WEEK_DAYS.map((element, index) => getMarkupDays(element, index, repeatingDays)).join(``);
+  const renderButtonsColor = ACCENT_COLORS.map((element, index) => getMarkupColors(element, index, color)).join(``);
 
   return (
     `<article class="card card--edit card--${color} ${classRepeat} ${classDeadline}">
@@ -57,7 +47,7 @@ export const createTaskEditor = (task) => {
                 <button class="card__date-deadline-toggle" type="button">date:<span class="card__date-status">yes</span></button>
                 <fieldset class="card__date-deadline">
                   <label class="card__input-deadline-wrap">
-                    <input class="card__date" type="text" placeholder="" name="date" value="${formedDate} ${formedTime}"/>
+                    <input class="card__date" type="text" placeholder="" name="date" value="${date} ${time}"/>
                   </label>
                 </fieldset>
                 <button class="card__repeat-toggle" type="button">repeat:<span class="card__repeat-status">yes</span></button>
@@ -84,3 +74,5 @@ export const createTaskEditor = (task) => {
     </article>`
   );
 };
+
+export {createTaskEditor};

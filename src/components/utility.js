@@ -7,4 +7,12 @@ const getTime = (date) => {
   return `${hours}:${minutes}`;
 };
 
-export {getRandomNumber, getTime};
+const getClassRepeat = (days) => Object.values(days).some(Boolean) ? `card--repeat` : ``;
+
+const getClassDeadline = (date) => date instanceof Date && date < Date.now() ? `card--deadline` : ``;
+
+const showDate = (visible, date, months) => visible ? `${date.getDate()} ${months[date.getMonth()]}` : ``;
+
+const showTime = (visible, date) => visible ? getTime(date) : ``;
+
+export {getRandomNumber, getClassRepeat, getClassDeadline, showDate, showTime};

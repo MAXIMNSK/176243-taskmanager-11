@@ -4,7 +4,7 @@ import {createBoard} from "./components/board";
 import {createTask} from "./components/task/task";
 import {createTaskEditor} from "./components/task/taskeditor";
 import {createLoadMoreButton} from "./components/loadmorebutton";
-import {Position, TaskCount} from "./components/constants";
+import {Position, TaskCount} from "./components/consts/constants";
 import {getTaskData} from "./components/task/mock/mock";
 
 const siteMainElement = document.querySelector(`.main`);

@@ -1,4 +1,4 @@
-import {getElements} from "./element";
+import {getMarkup} from "./element";
 
 /**
  * Функция возвращает секцию вёрстки в виде строки
@@ -7,7 +7,7 @@ import {getElements} from "./element";
 export const createFilter = () => {
   return (
     `<section class="main__filter filter container">
-      ${getElements()}
+      ${getMarkup()}
     </section>`
   );
 };

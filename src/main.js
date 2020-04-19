@@ -1,45 +1,41 @@
 import {createMenu} from "./components/menu";
-import {createFilter} from "./components/filter";
+import {createFilter} from "./components/filter/filter";
 import {createBoard} from "./components/board";
-import {createTask} from "./components/task";
-import {createTaskEditor} from "./components/taskeditor";
+import {createTask} from "./components/task/task";
+import {createTaskEditor} from "./components/task/taskeditor";
 import {createLoadMoreButton} from "./components/loadmorebutton";
-
-const TASK_COUNT = 3;
+import {Position, TaskCount} from "./components/consts/constants";
+import {getTaskData} from "./components/task/mock/mock";
 
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 
-const propertiesWhere = {
-  beforebegin: `beforebegin`,
-  afterbegin: `afterbegin`,
-  beforeend: `beforeend`,
-  afterend: `afterend`,
-};
+const taskDataTemplate = getTaskData(TaskCount.max);
+let showCurrentTasks = TaskCount.start;
 
-/**
- * Заполяем список задач, плитками оных
- * @param {*} taskBoard элемент в который мы рендерим возвращаемое функцией значение
- * @param {*} count передаём количество экспортируемых элементов
- */
-const fillTaskList = (taskBoard, count) => {
+const fillTaskBoard = (taskBoard, count) => {
   for (let i = 0; i < count; i++) {
-    render(taskBoard, createTask());
+    render(taskBoard, createTask(taskDataTemplate[i]));
   }
 };
 
-/**
- * Функция рендерит в разметку входные данные в виде строки
- * @param {*} container целевой блок в который будет рендерится шаблон
- * @param {*} template шаблон который функция рендерит
- * @param {*} place передаём позицию добавляемого элемента. Значение по умолчанию beforeend
- * @return {*} возвращает результат выполнения функции
- */
-const render = (container, template, place = propertiesWhere.beforeend) => container.insertAdjacentHTML(place, template);
+const render = (container, template, place = Position.beforeend) => container.insertAdjacentHTML(place, template);
 
-/**
- * Функция инициализирует блоки в разметку
- */
+const loadMoreTasks = () => {
+  const taskListElement = siteMainElement.querySelector(`.board__tasks`);
+  let loadMoreBtn = document.querySelector(`.load-more`);
+
+  loadMoreBtn.addEventListener(`click`, () => {
+    const currentCount = showCurrentTasks;
+    showCurrentTasks = showCurrentTasks + TaskCount.add;
+    taskDataTemplate.slice(currentCount, showCurrentTasks).forEach((task) => render(taskListElement, createTask(task)));
+
+    if (showCurrentTasks >= taskDataTemplate.length) {
+      loadMoreBtn.remove();
+    }
+  });
+};
+
 const init = () => {
   render(siteHeaderElement, createMenu());
   render(siteMainElement, createFilter());
@@ -48,9 +44,10 @@ const init = () => {
   const boardElement = siteMainElement.querySelector(`.board`);
   const taskListElement = siteMainElement.querySelector(`.board__tasks`);
 
-  render(taskListElement, createTaskEditor());
-  fillTaskList(taskListElement, TASK_COUNT);
+  render(taskListElement, createTaskEditor(taskDataTemplate[0]));
+  fillTaskBoard(taskListElement, showCurrentTasks);
   render(boardElement, createLoadMoreButton());
+  loadMoreTasks();
 };
 
 init();

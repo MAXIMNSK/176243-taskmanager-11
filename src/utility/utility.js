@@ -1,3 +1,5 @@
+import {Position} from "../consts/constants";
+
 const getRandomNumber = (max) => Math.floor(Math.random() * max);
 
 const getTime = (date) => {
@@ -8,11 +10,25 @@ const getTime = (date) => {
 };
 
 const getClassRepeat = (days) => Object.values(days).some(Boolean) ? `card--repeat` : ``;
-
 const getClassDeadline = (date) => date instanceof Date && date < Date.now() ? `card--deadline` : ``;
-
 const showDate = (visible, date, months) => visible ? `${date.getDate()} ${months[date.getMonth()]}` : ``;
-
 const showTime = (visible, date) => visible ? getTime(date) : ``;
 
-export {getRandomNumber, getClassRepeat, getClassDeadline, showDate, showTime};
+const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+  return newElement.firstChild;
+};
+
+const render = (container, element, place) => {
+  switch (place) {
+    case Position.afterbegin:
+      container.prepend(element);
+      break;
+    case Position.beforeend:
+      container.append(element);
+      break;
+  }
+};
+
+export {getRandomNumber, getClassRepeat, getClassDeadline, showDate, showTime, createElement, render};

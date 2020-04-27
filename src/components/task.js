@@ -1,4 +1,4 @@
-import {getClassRepeat, getClassDeadline, showDate, showTime} from "../utility";
+import {getClassRepeat, getClassDeadline, showDate, showTime, createElement} from "../utility/utility";
 import {MONTHS} from "../consts/constants";
 
 const createTask = (task) => {
@@ -48,4 +48,25 @@ const createTask = (task) => {
   );
 };
 
-export {createTask};
+export default class Task {
+  constructor(task) {
+    this._task = task;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTask(this._task);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

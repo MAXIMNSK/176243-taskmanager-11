@@ -1,8 +1,6 @@
-/**
- * Функция возвращает секцию вёрстки в виде строки
- * @return {string} возвращает блок разметки
- */
-export const createMenu = () => {
+import {createElement} from "../utility/utility";
+
+const createMenu = () => {
   return (
     `<section class="control__btn-wrap">
       <input type="radio" name="control" id="control__new-task" class="control__input visually-hidden"/>
@@ -14,3 +12,25 @@ export const createMenu = () => {
     </section>`
   );
 };
+
+export default class Menu {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createMenu();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,4 +1,4 @@
-import {getRandomNumber} from "../../utility";
+import {getRandomNumber} from "../../utility/utility";
 import {ACCENT_COLORS} from "../../consts/constants";
 
 const DAYS_REPEAT = {

@@ -1,4 +1,4 @@
-import {getFilters} from "./mock/mock";
+import {getFilters} from "./mock";
 
 const getTemplate = (filter, isChecked) => {
   const {name, count} = filter;

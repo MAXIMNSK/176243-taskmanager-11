@@ -1,53 +1,78 @@
-import {createMenu} from "./components/menu";
-import {createFilter} from "./components/filter/filter";
-import {createBoard} from "./components/board";
-import {createTask} from "./components/task/task";
-import {createTaskEditor} from "./components/task/taskeditor";
-import {createLoadMoreButton} from "./components/loadmorebutton";
-import {Position, TaskCount} from "./components/consts/constants";
-import {getTaskData} from "./components/task/mock/mock";
+import MenuComponent from "./components/menu";
+import FilterComponent from "./components/filter";
+import BoardComponent from "./components/board";
+import BoardFilterComponent from "./components/board/board_filter";
+import BoardTaskComponent from "./components/board/board_task";
+import TaskComponent from "./components/task";
+import TaskEditorComponent from "./components/task_editor";
+import LoadMoreButtonComponent from "./components/load_more_button";
+import {TaskCount, Position} from "./consts/constants";
+import {getTaskData} from "./components/task/mock";
+import {render} from "./utility/utility";
 
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 
-const taskDataTemplate = getTaskData(TaskCount.max);
-let showCurrentTasks = TaskCount.start;
+const tasksData = getTaskData(TaskCount.max);
+let currentTasksCount = TaskCount.start;
 
-const fillTaskBoard = (taskBoard, count) => {
-  for (let i = 0; i < count; i++) {
-    render(taskBoard, createTask(taskDataTemplate[i]));
-  }
+function openFormHundler(taskListElement, taskComponent, taskEditComponent) {
+  const openEditorBtn = taskComponent.getElement().querySelector(`.card__btn--edit`);
+  openEditorBtn.addEventListener(`click`, function () {
+    taskListElement.replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
+  });
+}
+
+function closeFormHundler(taskListElement, taskComponent, taskEditComponent) {
+  const editorForm = taskEditComponent.getElement().querySelector(`form`);
+  editorForm.addEventListener(`submit`, function (evt) {
+    evt.preventDefault();
+    taskListElement.replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
+  });
+}
+
+const renderTasks = (taskListElement, task) => {
+  const taskComponent = new TaskComponent(task);
+  const taskEditComponent = new TaskEditorComponent(task);
+
+  openFormHundler(taskListElement, taskComponent, taskEditComponent);
+  closeFormHundler(taskListElement, taskComponent, taskEditComponent);
+
+  render(taskListElement, taskComponent.getElement(), Position.beforeend);
 };
 
-const render = (container, template, place = Position.beforeend) => container.insertAdjacentHTML(place, template);
+const renderLoadMoreBtn = (boardComponent, taskListElement, tasks) => {
+  const loadMoreBtnComponent = new LoadMoreButtonComponent();
+  render(boardComponent.getElement(), loadMoreBtnComponent.getElement(), Position.beforeend);
 
-const loadMoreTasks = () => {
-  const taskListElement = siteMainElement.querySelector(`.board__tasks`);
-  let loadMoreBtn = document.querySelector(`.load-more`);
+  loadMoreBtnComponent.getElement().addEventListener(`click`, function () {
+    const prevTaskCount = currentTasksCount;
+    currentTasksCount = currentTasksCount + TaskCount.add;
+    tasks.slice(prevTaskCount, currentTasksCount).forEach((element) => renderTasks(taskListElement, element));
 
-  loadMoreBtn.addEventListener(`click`, () => {
-    const currentCount = showCurrentTasks;
-    showCurrentTasks = showCurrentTasks + TaskCount.add;
-    taskDataTemplate.slice(currentCount, showCurrentTasks).forEach((task) => render(taskListElement, createTask(task)));
-
-    if (showCurrentTasks >= taskDataTemplate.length) {
-      loadMoreBtn.remove();
+    if (currentTasksCount >= tasks.length) {
+      loadMoreBtnComponent.getElement().remove();
+      loadMoreBtnComponent.removeElement();
     }
   });
 };
 
+const renderBoard = (tasks) => {
+  const boardComponent = new BoardComponent();
+
+  render(siteMainElement, boardComponent.getElement(), Position.beforeend);
+  render(boardComponent.getElement(), new BoardFilterComponent().getElement(), Position.beforeend);
+  render(boardComponent.getElement(), new BoardTaskComponent().getElement(), Position.beforeend);
+
+  const taskListElement = boardComponent.getElement().querySelector(`.board__tasks`);
+  tasks.slice(0, currentTasksCount).forEach((element) => renderTasks(taskListElement, element));
+  renderLoadMoreBtn(boardComponent, taskListElement, tasks);
+};
+
 const init = () => {
-  render(siteHeaderElement, createMenu());
-  render(siteMainElement, createFilter());
-  render(siteMainElement, createBoard());
-
-  const boardElement = siteMainElement.querySelector(`.board`);
-  const taskListElement = siteMainElement.querySelector(`.board__tasks`);
-
-  render(taskListElement, createTaskEditor(taskDataTemplate[0]));
-  fillTaskBoard(taskListElement, showCurrentTasks);
-  render(boardElement, createLoadMoreButton());
-  loadMoreTasks();
+  render(siteHeaderElement, new MenuComponent().getElement(), Position.beforeend);
+  render(siteMainElement, new FilterComponent().getElement(), Position.beforeend);
+  renderBoard(tasksData);
 };
 
 init();

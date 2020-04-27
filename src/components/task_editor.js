@@ -1,19 +1,7 @@
-import {getClassRepeat, getClassDeadline, showDate, showTime} from "../utility";
+import {getClassRepeat, getClassDeadline, showDate, showTime, createElement} from "../utility/utility";
 import {ACCENT_COLORS, WEEK_DAYS, MONTHS} from "../consts/constants";
-
-const getMarkupDays = (day, index, repeatedDays) => {
-  return (`
-    <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-${day}-${index}" name="repeat" value="${day}" ${repeatedDays[day] ? `checked` : ``}/>
-    <label class="card__repeat-day" for="repeat-${day}-${index}">${day}</label>
-  `);
-};
-
-const getMarkupColors = (color, index, currentColor) => {
-  return (`
-    <input type="radio" id="color-${color}-${index}" class="card__color-input card__color-input--${color} visually-hidden" name="color" value="${color}" ${currentColor === color ? `checked` : ``}/>
-    <label for="color-${color}-${index}" class="card__color card__color--${color}">${color}</label>
-  `);
-};
+import {getMarkupDays} from "./task/markup_days";
+import {getMarkupColors} from "./task/markup_colors";
 
 const createTaskEditor = (task) => {
   const {color, description, dueDate, repeatingDays} = task;
@@ -75,4 +63,25 @@ const createTaskEditor = (task) => {
   );
 };
 
-export {createTaskEditor};
+export default class TaskEditor {
+  constructor(task) {
+    this._task = task;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTaskEditor(this._task);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,4 +1,4 @@
-import {createElement} from "../utility/utility";
+import AbstractionComponent from "./abstraction_component";
 
 const createBoard = () => {
   return (
@@ -6,24 +6,8 @@ const createBoard = () => {
   );
 };
 
-export default class Board {
-  constructor() {
-    this._element = null;
-  }
-
+export default class Board extends AbstractionComponent {
   getTemplate() {
     return createBoard();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

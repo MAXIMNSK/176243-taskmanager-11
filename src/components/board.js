@@ -1,4 +1,4 @@
-import AbstractionComponent from "./abstraction_component";
+import AbstractComponent from "./abstraction_component";
 
 const createBoard = () => {
   return (
@@ -6,7 +6,7 @@ const createBoard = () => {
   );
 };
 
-export default class Board extends AbstractionComponent {
+export default class Board extends AbstractComponent {
   getTemplate() {
     return createBoard();
   }

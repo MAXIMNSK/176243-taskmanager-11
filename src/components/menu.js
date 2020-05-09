@@ -1,4 +1,4 @@
-import AbstractionComponent from "./abstraction_component";
+import AbstractComponent from "./abstraction_component";
 
 const createMenu = () => {
   return (
@@ -13,7 +13,7 @@ const createMenu = () => {
   );
 };
 
-export default class Menu extends AbstractionComponent {
+export default class Menu extends AbstractComponent {
   getTemplate() {
     return createMenu();
   }

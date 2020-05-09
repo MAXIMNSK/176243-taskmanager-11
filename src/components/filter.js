@@ -1,5 +1,5 @@
 import {getMarkup} from "./filter/element";
-import AbstractionComponent from "./abstraction_component";
+import AbstractComponent from "./abstraction_component";
 
 export const createFilter = () => {
   return (
@@ -9,7 +9,7 @@ export const createFilter = () => {
   );
 };
 
-export default class Filter extends AbstractionComponent {
+export default class Filter extends AbstractComponent {
   constructor(filters) {
     super();
     this._filters = filters;

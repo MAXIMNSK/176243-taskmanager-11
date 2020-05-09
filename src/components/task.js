@@ -1,6 +1,6 @@
 import {getClassRepeat, getClassDeadline, showDate, showTime} from "../utility/utility";
 import {MONTHS} from "../consts/constants";
-import AbstractionComponent from "./abstraction_component";
+import AbstractComponent from "./abstraction_component";
 
 const createTask = (task) => {
   const {color, description, dueDate, isArchive, isFavorite, repeatingDays} = task;
@@ -49,7 +49,7 @@ const createTask = (task) => {
   );
 };
 
-export default class Task extends AbstractionComponent {
+export default class Task extends AbstractComponent {
   constructor(task) {
     super();
     this._task = task;

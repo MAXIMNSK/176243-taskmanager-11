@@ -1,4 +1,4 @@
-import AbstractionComponent from "./abstraction_component";
+import AbstractComponent from "./abstraction_component";
 import {SORT_TYPE} from "../consts/constants";
 
 const boardFilterList = () => {
@@ -11,7 +11,7 @@ const boardFilterList = () => {
   );
 };
 
-export default class BoardFiltersList extends AbstractionComponent {
+export default class BoardFiltersList extends AbstractComponent {
   constructor() {
     super();
 
@@ -26,17 +26,19 @@ export default class BoardFiltersList extends AbstractionComponent {
     return this._currentSortType;
   }
 
-  setSortTypeChangeHandler(handler) {
-    this.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-      const sortType = evt.target.dataset.sortType;
+  setSortTypeChangeHandler(callbackHandler) {
+    this.getElement().addEventListener(`click`, this._sortChanger.bind(this, callbackHandler));
+  }
 
-      if (evt.target.tagName !== `A` || this._currentSortType === sortType) {
-        return;
-      }
+  _sortChanger(callbackHandler, evt) {
+    evt.preventDefault();
+    const sortType = evt.target.dataset.sortType;
 
-      this._currentSortType = sortType;
-      handler(this._currentSortType);
-    });
+    if (evt.target.tagName !== `A` || this._currentSortType === sortType) {
+      return;
+    }
+
+    this._currentSortType = sortType;
+    callbackHandler(this._currentSortType);
   }
 }

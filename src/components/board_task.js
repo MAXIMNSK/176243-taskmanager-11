@@ -1,12 +1,8 @@
-import AbstractionComponent from "./abstraction_component";
+import AbstractComponent from "./abstraction_component";
 
-const getTasksList = () => {
-  return (
-    `<div class="board__tasks"></div>`
-  );
-};
+const getTasksList = () => `<div class="board__tasks"></div>`;
 
-export default class BoardTasksList extends AbstractionComponent {
+export default class BoardTasksList extends AbstractComponent {
   getTemplate() {
     return getTasksList();
   }

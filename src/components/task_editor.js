@@ -2,7 +2,7 @@ import {getClassRepeat, getClassDeadline, showDate, showTime} from "../utility/u
 import {ACCENT_COLORS, WEEK_DAYS, MONTHS} from "../consts/constants";
 import {getMarkupDays} from "./task/markup_days";
 import {getMarkupColors} from "./task/markup_colors";
-import AbstractionComponent from "./abstraction_component";
+import AbstractComponent from "./abstraction_component";
 
 const createTaskEditor = (task) => {
   const {color, description, dueDate, repeatingDays} = task;
@@ -64,7 +64,7 @@ const createTaskEditor = (task) => {
   );
 };
 
-export default class TaskEditor extends AbstractionComponent {
+export default class TaskEditor extends AbstractComponent {
   constructor(task) {
     super();
     this._task = task;

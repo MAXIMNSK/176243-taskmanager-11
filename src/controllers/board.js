@@ -16,8 +16,8 @@ const renderTasks = (taskListElement, task) => {
   const taskComponent = new TaskComponent(task);
   const taskEditComponent = new TaskEditorComponent(task);
 
-  openFormHundler(taskComponent, taskEditComponent);
-  closeFormHundler(taskComponent, taskEditComponent);
+  openFormHandler(taskComponent, taskEditComponent);
+  closeFormHandler(taskComponent, taskEditComponent);
 
   render(taskListElement, taskComponent, Position.beforeend);
 };
@@ -62,13 +62,13 @@ const renderLoadMoreBtn = (boardComponent, boardFilterComponent, taskListElement
   });
 };
 
-function openFormHundler(taskComponent, taskEditComponent) {
+function openFormHandler(taskComponent, taskEditComponent) {
   taskComponent.setEditBtnClickHandler(() => {
     replace(taskEditComponent, taskComponent);
   });
 }
 
-function closeFormHundler(taskComponent, taskEditComponent) {
+function closeFormHandler(taskComponent, taskEditComponent) {
   taskEditComponent.setSubmitBtnHandler((evt) => {
     evt.preventDefault();
     replace(taskComponent, taskEditComponent);

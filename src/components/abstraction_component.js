@@ -1,8 +1,8 @@
 import {createElement} from "../utility/converter";
 
-export default class AbstractionComponent {
+export default class AbstractComponent {
   constructor() {
-    if (new.target === AbstractionComponent) {
+    if (new.target === AbstractComponent) {
       throw new Error(`Can't instantiate AbstractComponent, only concrete one.`);
     }
 

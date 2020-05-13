@@ -1,7 +1,8 @@
-import {getClassRepeat, getClassDeadline, showDate, showTime, createElement} from "../utility/utility";
+import {getClassRepeat, getClassDeadline, showDate, showTime} from "../utility/utility";
 import {ACCENT_COLORS, WEEK_DAYS, MONTHS} from "../consts/constants";
 import {getMarkupDays} from "./task/markup_days";
 import {getMarkupColors} from "./task/markup_colors";
+import AbstractComponent from "./abstraction_component";
 
 const createTaskEditor = (task) => {
   const {color, description, dueDate, repeatingDays} = task;
@@ -63,25 +64,17 @@ const createTaskEditor = (task) => {
   );
 };
 
-export default class TaskEditor {
+export default class TaskEditor extends AbstractComponent {
   constructor(task) {
+    super();
     this._task = task;
-    this._element = null;
   }
 
   getTemplate() {
     return createTaskEditor(this._task);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setSubmitBtnHandler(handler) {
+    this.getElement().querySelector(`form`).addEventListener(`submit`, handler);
   }
 }

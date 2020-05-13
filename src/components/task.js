@@ -1,5 +1,6 @@
-import {getClassRepeat, getClassDeadline, showDate, showTime, createElement} from "../utility/utility";
+import {getClassRepeat, getClassDeadline, showDate, showTime} from "../utility/utility";
 import {MONTHS} from "../consts/constants";
+import AbstractComponent from "./abstraction_component";
 
 const createTask = (task) => {
   const {color, description, dueDate, isArchive, isFavorite, repeatingDays} = task;
@@ -48,25 +49,17 @@ const createTask = (task) => {
   );
 };
 
-export default class Task {
+export default class Task extends AbstractComponent {
   constructor(task) {
+    super();
     this._task = task;
-    this._element = null;
   }
 
   getTemplate() {
     return createTask(this._task);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setEditBtnClickHandler(handler) {
+    this.getElement().querySelector(`.card__btn--edit`).addEventListener(`click`, handler);
   }
 }

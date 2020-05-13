@@ -28,4 +28,10 @@ const TaskCount = {
   add: 5,
 };
 
-export {ACCENT_COLORS, WEEK_DAYS, MONTHS, Position, TaskCount};
+const SORT_TYPE = {
+  DEFAULT: `default`,
+  DATE_UP: `date-up`,
+  DATE_DOWN: `date-down`,
+};
+
+export {ACCENT_COLORS, WEEK_DAYS, MONTHS, Position, TaskCount, SORT_TYPE};
